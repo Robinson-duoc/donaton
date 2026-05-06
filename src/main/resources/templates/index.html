@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Donaton Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Donaton</h2>
+
+    <a href="/">Dashboard</a>
+    <a href="/usuarios-web">Usuarios</a>
+    <a href="/donaciones-web">Donaciones</a>
+    <a href="/productos-web">Inventario</a>
+</div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Panel Administrativo</h1>
+        <p>Sistema inteligente de gestión humanitaria</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Donaciones</h3>
+            <p>152</p>
+        </div>
+
+        <div class="card">
+            <h3>Usuarios Activos</h3>
+            <p>87</p>
+        </div>
+
+        <div class="card">
+            <h3>Productos</h3>
+            <p>43</p>
+        </div>
+
+    </div>
+
+    <div class="table-container">
+        <h2>Actividad reciente</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Donante</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Juan Pérez</td>
+                    <td>Alimentos</td>
+                    <td>20</td>
+                </tr>
+
+                <tr>
+                    <td>María López</td>
+                    <td>Ropa</td>
+                    <td>15</td>
+                </tr>
+
+                <tr>
+                    <td>Fundación Vida</td>
+                    <td>Medicamentos</td>
+                    <td>50</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
