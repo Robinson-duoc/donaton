@@ -130,3 +130,19 @@ button{
 button:hover{
     background:#1d4ed8;
 }
+
+a{
+    text-decoration:none;
+}
+
+td a{
+    background:#dc2626;
+    color:white;
+    padding:8px 12px;
+    border-radius:6px;
+    transition:0.3s;
+}
+
+td a:hover{
+    background:#b91c1c;
+}

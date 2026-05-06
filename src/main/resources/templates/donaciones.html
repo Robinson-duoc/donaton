@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Donaciones</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Donaton</h2>
+
+    <a href="/">Dashboard</a>
+    <a href="/donaciones-web">Donaciones</a>
+</div>
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>Gestión de Donaciones</h1>
+        <p>Administración de ayuda humanitaria</p>
+    </div>
+
+    <!-- FORMULARIO -->
+
+    <div class="form-container">
+
+        <h2>Nueva Donación</h2>
+
+        <form action="/guardar-donacion" method="post">
+
+            <div class="form-group">
+                <label>Donante</label>
+                <input type="text" name="donante" required>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo</label>
+                <input type="text" name="tipo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Cantidad</label>
+                <input type="number" name="cantidad" required>
+            </div>
+
+            <button type="submit">
+                Registrar Donación
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- TABLA -->
+
+    <div class="table-container">
+
+        <h2>Lista de Donaciones</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Donante</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr th:each="d : ${donaciones}">
+
+                    <td th:text="${d.id}"></td>
+
+                    <td th:text="${d.donante}"></td>
+
+                    <td th:text="${d.tipo}"></td>
+
+                    <td th:text="${d.cantidad}"></td>
+
+                    <td>
+                        <a th:href="@{/eliminar-donacion/{id}(id=${d.id})}">
+                            Eliminar
+                        </a>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>
