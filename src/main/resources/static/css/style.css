@@ -146,3 +146,28 @@ td a{
 td a:hover{
     background:#b91c1c;
 }
+
+.topbar h1{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.topbar p{
+    color:#64748b;
+}
+
+.card{
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.table-container h2{
+    margin-bottom:20px;
+}
+
+tbody tr:hover{
+    background:#f8fafc;
+}
