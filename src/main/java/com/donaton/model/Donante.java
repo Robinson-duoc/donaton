@@ -1,16 +1,27 @@
-package com.donaton.dto;
+package com.donaton.model;
 
-public class UsuarioDTO {
+import jakarta.persistence.*;
+
+@Entity
+public class Donante {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nombre;
     private String correo;
 
-    public UsuarioDTO() {
+    public Donante() {
     }
 
-    public UsuarioDTO(String nombre, String correo) {
+    public Donante(String nombre, String correo) {
         this.nombre = nombre;
         this.correo = correo;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getNombre() {

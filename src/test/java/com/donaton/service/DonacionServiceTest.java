@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ public class DonacionServiceTest {
     private DonacionService donacionService;
 
     @BeforeEach
-    void setup(){
+    void setup() {
 
         donacionRepository = Mockito.mock(DonacionRepository.class);
 
@@ -27,14 +28,14 @@ public class DonacionServiceTest {
     }
 
     @Test
-    void deberiaGuardarDonacion(){
+    void deberiaGuardarDonacion() {
 
-        Donacion donacion =
-                new Donacion(
-                        "Juan",
-                        "Alimentos",
-                        10
-                );
+        Donacion donacion = new Donacion();
+
+        donacion.setDonante("Juan");
+        donacion.setTipo("Alimentos");
+        donacion.setCantidad(10);
+        donacion.setFecha(LocalDate.now());
 
         when(donacionRepository.save(donacion))
                 .thenReturn(donacion);
@@ -52,16 +53,16 @@ public class DonacionServiceTest {
     }
 
     @Test
-    void deberiaListarDonaciones(){
+    void deberiaListarDonaciones() {
 
-        List<Donacion> lista =
-                List.of(
-                        new Donacion(
-                                "Maria",
-                                "Ropa",
-                                5
-                        )
-                );
+        Donacion donacion = new Donacion();
+
+        donacion.setDonante("Maria");
+        donacion.setTipo("Ropa");
+        donacion.setCantidad(5);
+        donacion.setFecha(LocalDate.now());
+
+        List<Donacion> lista = List.of(donacion);
 
         when(donacionRepository.findAll())
                 .thenReturn(lista);
