@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario de Bodega - Donatón</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        .container { max-width: 800px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #17a2b8; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em; width: 100%; }
+        button:hover { background-color: #138496; }
+        .error { color: red; margin-bottom: 15px; font-weight: bold; }
+        .exito { color: green; margin-bottom: 15px; font-weight: bold; }
+        table { width: 100%; margin-top: 30px; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📦 Control de Inventario y Bodega (Donaciones Materiales)</h2>
+    
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <div th:if="${param.exito}" class="exito">¡Producto registrado e ingresado a bodega con éxito!</div>
+
+    <form th:action="@{/inventario/guardar}" th:object="${item}" method="post">
+        <div class="form-group">
+            <label>ID del Donante (Usuario):</label>
+            <input type="number" th:field="*{usuarioId}" placeholder="Ej: 1" required />
+        </div>
+        <div class="form-group">
+            <label>Nombre del Producto / Insumo:</label>
+            <input type="text" th:field="*{nombreProducto}" placeholder="Ej: Frazadas térmicas, Arroz 1kg" required />
+        </div>
+        <div class="form-group">
+            <label>Categoría:</label>
+            <select th:field="*{categoria}" required>
+                <option value="Alimentos">Alimentos No Perecederos</option>
+                <option value="Ropa">Ropa y Abrigo</option>
+                <option value="Medicamentos">Medicamentos / Primeros Auxilios</option>
+                <option value="Otros">Otros Insumos</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Cantidad (Unidades):</label>
+            <input type="number" th:field="*{cantidad}" placeholder="Ej: 20" required />
+        </div>
+        <button type="submit">Registrar Entrada a Bodega</button>
+    </form>
+
+    <h3>📋 Stock Actual en Bodega</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Ítem</th>
+                <th>Donante (User ID)</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+                <th>Fecha de Ingreso</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${listaProductos}">
+                <td th:text="${p.id}"></td>
+                <td th:text="${p.usuarioId}"></td>
+                <td th:text="${p.nombreProducto}"></td>
+                <td th:text="${p.categoria}"></td>
+                <td th:text="${p.cantidad}"></td>
+                <td th:text="${#temporals.format(p.fechaIngreso, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
