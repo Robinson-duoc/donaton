@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Donaton Dashboard</title>
+    <title>Donaton Plataforma Integral</title>
     <style>
         /* ── BASE ── */
         * {
@@ -69,6 +69,7 @@
             margin-bottom: 4px;
             transition: 0.2s;
             font-size: 0.95rem;
+            cursor: pointer;
         }
         .sidebar a:hover {
             background: #334155;
@@ -92,13 +93,11 @@
             text-align: center;
         }
 
-        /* ── MAIN ── */
+        /* ── MAIN & TOPBAR ── */
         .main {
             margin-left: 250px;
             padding: 30px;
         }
-
-        /* ── TOPBAR ── */
         .topbar {
             background: white;
             padding: 24px 28px;
@@ -128,7 +127,20 @@
             font-weight: 500;
         }
 
-        /* ── CARDS ── */
+        /* ── SECCIONES / VISTAS ── */
+        .vista {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .vista.activa {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CARDS (DASHBOARD) ── */
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -146,250 +158,224 @@
             flex-direction: column;
             gap: 12px;
         }
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         .card.blue  { border-left-color: #2563eb; }
         .card.green { border-left-color: #16a34a; }
         .card.amber { border-left-color: #d97706; }
-        .card.rose  { border-left-color: #e11d48; }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .card h3 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .card-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
+        
+        .card-header { display: flex; align-items: center; justify-content: space-between; }
+        .card h3 { font-size: 0.85rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .card-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
         .card.blue  .card-icon { background: #dbeafe; }
         .card.green .card-icon { background: #dcfce7; }
         .card.amber .card-icon { background: #fef3c7; }
-        .card.rose  .card-icon { background: #ffe4e6; }
+        
+        .card-value { font-size: 2rem; font-weight: 800; color: #0f172a; line-height: 1; }
+        .card-sub { font-size: 0.78rem; color: #94a3b8; }
 
-        .card-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #0f172a;
-            line-height: 1;
-        }
-        .card-sub {
-            font-size: 0.78rem;
-            color: #94a3b8;
-        }
-
-        /* ── SECTION HEADER ── */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-        .section-header h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .btn-ver {
-            font-size: 0.82rem;
-            color: #2563eb;
-            background: #dbeafe;
-            padding: 6px 14px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .btn-ver:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* ── TABLA ── */
-        .table-container {
+        /* ── TABLAS & OTROS ── */
+        .table-container, .content-box {
             background: white;
             padding: 24px;
             border-radius: 14px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.07);
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table th {
-            background: #f8fafc;
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        table td {
-            padding: 14px 15px;
-            text-align: left;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9rem;
-            color: #334155;
-        }
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        tbody tr:hover td {
-            background: #f8fafc;
-        }
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .section-header h2 { font-size: 1.1rem; font-weight: 700; color: #0f172a; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        table th { background: #f8fafc; padding: 12px 15px; text-align: left; font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
+        table td { padding: 14px 15px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; color: #334155; }
+        tbody tr:hover td { background: #f8fafc; }
+        
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
         .badge-blue  { background: #dbeafe; color: #1d4ed8; }
-        .badge-green { background: #dcfce7; color: #15803d; }
 
-        /* ── EMPTY STATE ── */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #94a3b8;
-        }
-        .empty-state .empty-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-        .empty-state p {
-            font-size: 0.9rem;
-        }
-
-        a { text-decoration: none; }
+        /* ── BOTONES Y FORMULARIOS ── */
+        .btn-primary { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { background: #1d4ed8; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #475569; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px #dbeafe; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <div class="sidebar-logo">
-        <div class="logo-icon">🤝</div>
+        <div class="logo-icon">🎁</div>
         <h2>Donaton</h2>
     </div>
 
-    <p class="sidebar-label">Menú</p>
-    <a href="/" class="active">
-        <span class="nav-icon">🏠</span> Dashboard
+    <p class="sidebar-label">Menú Principal</p>
+    <a onclick="cambiarVista('inicio')" id="nav-inicio" class="active">
+        <span class="nav-icon">🏠</span> Inicio
     </a>
-    <a href="/donaciones-web">
-        <span class="nav-icon">💝</span> Donaciones
+    <a onclick="cambiarVista('dashboard')" id="nav-dashboard">
+        <span class="nav-icon">📊</span> Panel de Gestión
+    </a>
+    <a onclick="cambiarVista('contacto')" id="nav-contacto">
+        <span class="nav-icon">✉️</span> Contacto
     </a>
 
     <div class="sidebar-footer">
-        Donaton &copy; 2026
+        Donaton &copy; 2026<br>Arquitectura de Microservicios
     </div>
 </div>
 
 <div class="main">
-
+    
     <div class="topbar">
         <div class="topbar-left">
-            <h1>Panel Administrativo</h1>
-            <p>Plataforma para la gestión y coordinación de ayuda humanitaria</p>
+            <h1 id="topbar-title">Bienvenido a Donatón</h1>
+            <p id="topbar-subtitle">Plataforma para la gestión y coordinación de ayuda humanitaria</p>
         </div>
         <div class="topbar-date" id="fecha-actual"></div>
     </div>
 
-    <!-- CARDS -->
-    <div class="cards">
-
-        <div class="card blue">
-            <div class="card-header">
-                <h3>Total Donaciones</h3>
-                <div class="card-icon">💝</div>
+    <div id="vista-inicio" class="vista activa">
+        <div class="content-box" style="text-align: center; padding: 60px 20px;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">🤝</div>
+            <h2 style="font-size: 2rem; color: #0f172a; margin-bottom: 15px;">Juntos hacemos la diferencia</h2>
+            <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px; line-height: 1.6;">
+                Nuestra plataforma de microservicios te permite registrar donaciones, administrar el inventario y gestionar los usuarios de manera transparente y en tiempo real.
+            </p>
+            <div style="background: #f8fafc; padding: 20px; border-radius: 12px; display: inline-block; border: 1px dashed #cbd5e0; margin-bottom: 30px;">
+                <h3 style="color: #475569; font-size: 0.9rem; text-transform: uppercase;">Monto Total Recaudado Hasta Hoy</h3>
+                <p style="font-size: 2.5rem; font-weight: 800; color: #2563eb;" th:text="${totalDonaciones != null ? '$' + totalDonaciones : '---'}">$0</p>
             </div>
-            <div class="card-value" th:text="${totalDonaciones}">—</div>
-            <div class="card-sub">donaciones registradas</div>
+            <br>
+            <button onclick="cambiarVista('dashboard')" class="btn-primary" style="font-size: 1.1rem; padding: 12px 30px;">
+                Ir al Panel Administrativo →
+            </button>
         </div>
-
-        <div class="card green">
-            <div class="card-header">
-                <h3>Usuarios Registrados</h3>
-                <div class="card-icon">👥</div>
-            </div>
-            <div class="card-value" th:text="${totalUsuarios}">—</div>
-            <div class="card-sub">usuarios en el sistema</div>
-        </div>
-
-        <div class="card amber">
-            <div class="card-header">
-                <h3>Productos en Inventario</h3>
-                <div class="card-icon">📦</div>
-            </div>
-            <div class="card-value" th:text="${totalProductos}">—</div>
-            <div class="card-sub">ítems disponibles</div>
-        </div>
-
     </div>
 
-    <!-- TABLA -->
-    <div class="table-container">
-        <div class="section-header">
-            <h2>Últimas Donaciones</h2>
-            <a href="/donaciones-web" class="btn-ver">Ver todas →</a>
+    <div id="vista-dashboard" class="vista">
+        <div class="cards">
+            <div class="card blue">
+                <div class="card-header">
+                    <h3>Total Donaciones</h3>
+                    <div class="card-icon">💝</div>
+                </div>
+                <div class="card-value" th:text="${totalDonaciones}">—</div>
+                <div class="card-sub">donaciones registradas</div>
+            </div>
+
+            <div class="card green">
+                <div class="card-header">
+                    <h3>Usuarios Registrados</h3>
+                    <div class="card-icon">👥</div>
+                </div>
+                <div class="card-value" th:text="${totalUsuarios}">—</div>
+                <div class="card-sub">usuarios en el sistema</div>
+            </div>
+
+            <div class="card amber">
+                <div class="card-header">
+                    <h3>Productos Inventario</h3>
+                    <div class="card-icon">📦</div>
+                </div>
+                <div class="card-value" th:text="${totalProductos}">—</div>
+                <div class="card-sub">ítems disponibles</div>
+            </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Donante</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="d : ${donaciones}">
-                    <td th:text="${d.id}"></td>
-                    <td th:text="${d.donante}"></td>
-                    <td>
-                        <span class="badge badge-blue" th:text="${d.tipo}"></span>
-                    </td>
-                    <td th:text="${d.cantidad}"></td>
-                </tr>
-                <!-- Empty state cuando no hay datos (Thymeleaf lo oculta si hay filas) -->
-                <tr th:if="${#lists.isEmpty(donaciones)}">
-                    <td colspan="4">
-                        <div class="empty-state">
-                            <div class="empty-icon">📭</div>
-                            <p>No hay donaciones registradas aún.</p>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <div class="section-header">
+                <h2>Últimas Donaciones</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Donante</th>
+                        <th>Tipo</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${donaciones}">
+                        <td th:text="${d.id}"></td>
+                        <td th:text="${d.donante}"></td>
+                        <td><span class="badge badge-blue" th:text="${d.tipo}"></span></td>
+                        <td th:text="${d.cantidad}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(donaciones)}">
+                        <td colspan="4" style="text-align: center; padding: 40px; color: #94a3b8;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">📭</div>
+                            No hay donaciones registradas aún.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="vista-contacto" class="vista">
+        <div class="content-box" style="max-width: 600px; margin: 0 auto;">
+            <div class="section-header" style="border-bottom: 2px solid #f1f5f9; padding-bottom: 15px;">
+                <h2>Envíanos un Mensaje</h2>
+            </div>
+            <p style="color: #64748b; margin-bottom: 20px;">¿Necesitas soporte técnico o tienes dudas sobre una donación? Nuestro equipo te responderá a la brevedad.</p>
+            
+            <form onsubmit="event.preventDefault(); alert('Mensaje enviado exitosamente al soporte.');">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" placeholder="juan@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Asunto / Mensaje</label>
+                    <textarea rows="4" placeholder="¿En qué podemos ayudarte?" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Enviar Mensaje de Soporte</button>
+            </form>
+        </div>
     </div>
 
 </div>
 
 <script>
-    // Fecha en español
+    // --- Lógica de Fecha ---
     const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
     const hoy = new Date().toLocaleDateString('es-CL', opciones);
-    document.getElementById('fecha-actual').textContent =
-        hoy.charAt(0).toUpperCase() + hoy.slice(1);
+    document.getElementById('fecha-actual').textContent = hoy.charAt(0).toUpperCase() + hoy.slice(1);
+
+    // --- Lógica de Navegación SPA ---
+    function cambiarVista(vistaId) {
+        // 1. Ocultar todas las vistas
+        document.querySelectorAll('.vista').forEach(el => el.classList.remove('activa'));
+        
+        // 2. Quitar clase "active" de todos los links del menú
+        document.querySelectorAll('.sidebar a').forEach(el => el.classList.remove('active'));
+        
+        // 3. Mostrar la vista seleccionada
+        document.getElementById('vista-' + vistaId).classList.add('activa');
+        
+        // 4. Marcar el link del menú como activo
+        document.getElementById('nav-' + vistaId).classList.add('active');
+
+        // 5. Cambiar el título superior dinámicamente según la sección
+        const titulo = document.getElementById('topbar-title');
+        const subtitulo = document.getElementById('topbar-subtitle');
+        
+        if(vistaId === 'inicio') {
+            titulo.textContent = 'Bienvenido a Donatón';
+            subtitulo.textContent = 'Portal público de la campaña';
+        } else if(vistaId === 'dashboard') {
+            titulo.textContent = 'Panel Administrativo';
+            subtitulo.textContent = 'Gestión y métricas en tiempo real';
+        } else if(vistaId === 'contacto') {
+            titulo.textContent = 'Centro de Soporte';
+            subtitulo.textContent = 'Comunicación directa con el equipo técnico';
+        }
+    }
 </script>
 
 </body>
