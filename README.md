@@ -111,26 +111,52 @@ cd donaton
 
 ### 2. Configurar base de datos
 
-Crear una base de datos:
+Configuración de Base de Datos
 
-```sql
-CREATE DATABASE donaton;
-```
+Este proyecto utiliza MySQL y crea automáticamente la base de datos si no existe.
 
-Configurar:
+Archivo:
 
-`src/main/resources/application.properties`
+src/main/resources/application.properties
 
-Ejemplo:
+Configuración utilizada:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/donaton
+spring.datasource.url=jdbc:mysql://localhost:3306/donaton?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+
 spring.datasource.username=root
-spring.datasource.password=tu_password
+spring.datasource.password=
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-```
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+Explicación de configuración
+Propiedad	Función
+createDatabaseIfNotExist=true	Crea automáticamente la BD donaton
+serverTimezone=UTC	Configura zona horaria
+useSSL=false	Deshabilita conexión SSL local
+ddl-auto=update	Actualiza tablas automáticamente
+show-sql=true	Muestra consultas SQL en consola
+MySQLDialect	Configuración específica para MySQL
+Requisitos
+Tener instalado MySQL Server
+Tener el servicio de MySQL iniciado
+Usuario configurado:
+Usuario: root
+Contraseña: vacía
+Verificar conexión
+
+Ejecutar:
+
+mvn spring-boot:run
+
+Si todo funciona deberías ver:
+
+Started DonatonApplication
+
+y la base donaton aparecerá automáticamente en MySQL.
 
 ---
 
