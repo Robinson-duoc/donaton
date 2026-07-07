@@ -1,76 +1,225 @@
-##1. Prerrequisitos y Configuración
+# Donatón
 
-Antes de levantar el proyecto, asegúrate de tener instalado en tu entorno local:
-* **Java JDK 17** o superior.
-* **Maven 3.6+** (el proyecto incluye el wrapper `mvnw`, por lo que no necesitas instalar Maven globalmente).
-* Un editor de código o IDE como **IntelliJ IDEA**, **Eclipse** o **VS Code** con el plugin de Spring Boot.
+Sistema web para la gestión de donaciones, usuarios e inventario desarrollado con arquitectura modular usando Spring Boot.
 
-Clona el repositorio y navega hasta la raíz del proyecto:
+## Descripción
 
-2. Comandos para Levantar el Proyecto
-Dado que el proyecto está estructurado en módulos funcionales (usuarios, donaciones, inventario), puedes levantar la aplicación completa ejecutando el plugin de Spring Boot desde la raíz:
+Donatón es una plataforma que permite administrar campañas de donación mediante tres módulos principales:
 
-# En sistemas Unix/Linux/Mac
-./mvnw spring-boot:run
+* Gestión de usuarios
+* Gestión de inventario
+* Gestión de donaciones
 
-# En Windows (PowerShell o CMD)
-mvnw.cmd spring-boot:run
+El objetivo es centralizar el registro y seguimiento de aportes realizados por usuarios y controlar los recursos disponibles.
 
-Una vez levantado, el servidor estará escuchando en el puerto configurado (por defecto 8080). Puedes acceder a la interfaz web de Thymeleaf desde tu navegador en: http://localhost:8080/usuarios (o la ruta raíz configurada).
+---
 
-3. Ejecución de Pruebas (Testing)
-Para garantizar la calidad del software y cumplir con el aseguramiento de calidad (QA) y cobertura de más del 60% requerida, utilizamos JUnit 5 y Mockito.
+## Tecnologías utilizadas
 
-Comando para ejecutar todos los tests:
-Bash
-# Unix/Linux/Mac
-./mvnw test
+### Backend
 
-# Windows
-mvnw.cmd test
+* Java 17
+* Spring Boot 4
+* Spring MVC
+* Spring Data JPA
+* Maven
 
-Dónde Ver los Resultados de los Tests
-Una vez ejecutado el comando ./mvnw test, el reporte de ejecución se genera automáticamente en el sistema de compilación de Maven.
+### Base de datos
 
-Reporte de consola: Puedes ver qué pruebas pasaron y cuáles fallaron directamente en la terminal.
+* MySQL
 
-Reportes detallados (XML y Texto): Los archivos generados por Surefire se encuentran en la ruta:
-target/surefire-reports/
+### Frontend
 
-Reporte de Cobertura (JaCoCo): Si tienes configurado el plugin de cobertura JaCoCo en tu pom.xml, el archivo HTML que grafica la cobertura de código (para verificar el >60%) se genera en:
-target/site/jacoco/index.html (puedes abrir este archivo directamente en tu navegador).
+* Thymeleaf
+* HTML
+* CSS
+* JavaScript
 
+### Testing
 
-Estructura del Proyecto
-El proyecto sigue una arquitectura organizada por dominios para mantener desacoplados los microservicios:
+* JUnit 5
+* Mockito
 
-Plaintext
-src/
-├── main/
-│   └── java/
-│       └── com/donaton/
-│           ├── donaciones/     # Módulo de donaciones (monetarias)
-│           ├── inventario/     # Módulo de bodega e insumos físicos
-│           └── usuarios/       # Módulo de gestión de donantes y usuarios
-│               ├── controller/ # Puntos de entrada HTTP / Vistas Thymeleaf
-│               ├── model/      # Entidades / Mapeo de Base de Datos
-│               ├── repository/ # Interfaces de acceso a datos (JPA)
-│               └── service/    # Lógica de negocio
-└── test/                       # Espejo de la estructura main con las pruebas unitarias
+---
 
+## Arquitectura del proyecto
 
-Gestión de Dependencias y Plugins (Pom.xml)
-El proyecto incluye las siguientes dependencias principales en el pom.xml:
+```plaintext
+src
+├── main
+│   ├── java
+│   │   └── com.donaton
+│   │       ├── usuarios
+│   │       ├── inventario
+│   │       ├── donaciones
+│   │       └── DonatonApplication.java
+│   │
+│   └── resources
+│       ├── templates
+│       ├── static
+│       └── application.properties
+│
+└── test
+    └── java
+        └── com.donaton
+            ├── usuarios
+            ├── inventario
+            └── donaciones
+```
 
-spring-boot-starter-data-jpa
+---
 
-spring-boot-starter-thymeleaf
+## Funcionalidades
 
-spring-boot-starter-web
+### Usuarios
 
-h2 (Base de datos en memoria para desarrollo rápido y pruebas)
+* Registro de usuarios
+* Validación de correo duplicado
+* Consulta de usuarios
+* Búsqueda por ID
 
-spring-boot-starter-test (Incluye JUnit 5, Spring Boot Test)
+### Inventario
 
-mockito-junit-jupiter
+* Registro de productos
+* Validación de usuario existente
+* Control de cantidad
+
+### Donaciones
+
+* Registro de donaciones
+* Validación de usuario
+* Cálculo del total donado
+* Historial de donaciones
+
+---
+
+## Instalación
+
+### 1. Clonar repositorio
+
+```bash
+git clone URL_DEL_REPOSITORIO
+```
+
+Entrar al proyecto:
+
+```bash
+cd donaton
+```
+
+---
+
+### 2. Configurar base de datos
+
+Configuración de Base de Datos
+
+Este proyecto utiliza MySQL y crea automáticamente la base de datos si no existe.
+
+Archivo:
+
+src/main/resources/application.properties
+
+Configuración utilizada:
+
+spring.datasource.url=jdbc:mysql://localhost:3306/donaton?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+
+spring.datasource.username=root
+spring.datasource.password=
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+Explicación de configuración
+Propiedad	Función
+createDatabaseIfNotExist=true	Crea automáticamente la BD donaton
+serverTimezone=UTC	Configura zona horaria
+useSSL=false	Deshabilita conexión SSL local
+ddl-auto=update	Actualiza tablas automáticamente
+show-sql=true	Muestra consultas SQL en consola
+MySQLDialect	Configuración específica para MySQL
+Requisitos
+Tener instalado MySQL Server
+Tener el servicio de MySQL iniciado
+Usuario configurado:
+Usuario: root
+Contraseña: vacía
+Verificar conexión
+
+Ejecutar:
+
+mvn spring-boot:run
+
+Si todo funciona deberías ver:
+
+Started DonatonApplication
+
+y la base donaton aparecerá automáticamente en MySQL.
+
+---
+
+### 3. Instalar dependencias
+
+```bash
+mvn clean install
+```
+
+---
+
+### 4. Ejecutar aplicación
+
+```bash
+mvn spring-boot:run
+```
+
+Aplicación disponible en:
+
+```plaintext
+http://localhost:8080
+```
+
+---
+
+## Ejecutar pruebas
+
+Ejecutar todas:
+
+```bash
+mvn test
+```
+
+Ejecutar una clase:
+
+```bash
+mvn -Dtest=UsuarioServiceTest test
+```
+
+---
+
+## Casos de prueba implementados
+
+### UsuarioService
+
+* Registro exitoso
+* Validación correo duplicado
+* Obtener usuarios
+* Buscar por ID
+
+### InventarioService
+
+* Registro exitoso
+* Usuario inexistente
+* Cantidad inválida
+* Obtener inventario
+
+### DonacionService
+
+* Registro exitoso
+* Usuario inexistente
+* Monto inválido
+* Obtener total donado
+
+---
 

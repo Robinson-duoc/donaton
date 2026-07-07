@@ -37,6 +37,7 @@ public class DonacionService {
         Double total = donacionRepository.obtenerTotalRecaudado();
         return (total != null) ? total : 0.0;
     }
+
     // 3. Obtener todas las donaciones para el historial global
     public List<Donacion> obtenerTodas() {
         return donacionRepository.findAll();
