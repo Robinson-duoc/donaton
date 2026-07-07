@@ -238,6 +238,26 @@ text-align:center;
 
 </div>
 
+<div style="display:flex; align-items:center; gap:15px;">
+
+<span th:if="${session.usuarioNombre != null}" style="opacity:.9;">
+👋 Hola, <span th:text="${session.usuarioNombre}"></span>
+</span>
+
+<a th:if="${session.usuarioNombre != null}"
+   th:href="@{/logout}"
+   style="background:#c0392b;color:white;padding:8px 16px;border-radius:8px;text-decoration:none;">
+Cerrar sesión
+</a>
+
+<a th:if="${session.usuarioNombre == null}"
+   th:href="@{/login}"
+   style="background:#28a745;color:white;padding:8px 16px;border-radius:8px;text-decoration:none;">
+Iniciar sesión
+</a>
+
+</div>
+
 </div>
 
 </header>

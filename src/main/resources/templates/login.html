@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Iniciar Sesión | Donatón</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f5f7fa;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.container{
+
+max-width:420px;
+width:100%;
+
+background:white;
+
+border-radius:16px;
+
+padding:35px;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.top{
+
+text-align:center;
+
+margin-bottom:30px;
+
+}
+
+.top h2{
+
+color:#0a3d62;
+
+margin-bottom:8px;
+
+}
+
+.top p{
+
+color:#666;
+
+font-size:14px;
+
+}
+
+.error{
+
+background:#ffdcdc;
+
+color:#c0392b;
+
+padding:12px;
+
+border-radius:8px;
+
+margin-bottom:20px;
+
+font-size:14px;
+
+}
+
+.aviso{
+
+background:#fff4d6;
+
+color:#8a6d1f;
+
+padding:12px;
+
+border-radius:8px;
+
+margin-bottom:20px;
+
+font-size:14px;
+
+}
+
+.exito{
+
+background:#dff9e6;
+
+color:#27ae60;
+
+padding:12px;
+
+border-radius:8px;
+
+margin-bottom:20px;
+
+font-size:14px;
+
+}
+
+.form-group{
+
+display:flex;
+
+flex-direction:column;
+
+margin-bottom:18px;
+
+}
+
+label{
+
+margin-bottom:8px;
+
+font-weight:bold;
+
+color:#333;
+
+}
+
+input{
+
+padding:12px;
+
+border:1px solid #ccc;
+
+border-radius:8px;
+
+}
+
+button{
+
+margin-top:10px;
+
+background:#28a745;
+
+color:white;
+
+border:none;
+
+padding:14px;
+
+border-radius:8px;
+
+cursor:pointer;
+
+font-size:16px;
+
+width:100%;
+
+}
+
+button:hover{
+
+background:#219150;
+
+}
+
+.pie{
+
+text-align:center;
+
+margin-top:22px;
+
+font-size:14px;
+
+color:#666;
+
+}
+
+.pie a{
+
+color:#0a3d62;
+
+font-weight:bold;
+
+text-decoration:none;
+
+}
+
+.volver{
+
+display:inline-block;
+
+margin-top:18px;
+
+text-decoration:none;
+
+color:#0a3d62;
+
+font-size:14px;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top">
+
+<h2>🎁 Donatón</h2>
+
+<p>Inicia sesión para donar o administrar el sistema</p>
+
+</div>
+
+
+<div th:if="${error}" class="error" th:text="${error}"></div>
+
+<div th:if="${param.next}" class="aviso">
+🔒 Debes iniciar sesión para acceder a esa página.
+</div>
+
+<div th:if="${param.logout}" class="exito">
+Sesión cerrada correctamente.
+</div>
+
+
+<form th:action="@{/login}" method="post">
+
+<input type="hidden" name="next" th:value="${next}">
+
+<div class="form-group">
+
+<label>Correo Electrónico</label>
+
+<input type="email" name="email" placeholder="correo@ejemplo.com" required autofocus>
+
+</div>
+
+<div class="form-group">
+
+<label>Contraseña</label>
+
+<input type="password" name="password" placeholder="********" required>
+
+</div>
+
+<button type="submit">Iniciar Sesión</button>
+
+</form>
+
+
+<div class="pie">
+¿Aún no tienes cuenta?
+<a th:href="@{/usuarios/registro}">Regístrate aquí</a>
+</div>
+
+<div style="text-align:center;">
+<a href="/" class="volver">← Volver al inicio</a>
+</div>
+
+</div>
+
+</body>
+</html>

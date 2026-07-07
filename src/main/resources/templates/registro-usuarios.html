@@ -249,9 +249,17 @@ gap:15px;
 
 <h2>👤 Registro de Usuarios - Donatón</h2>
 
+<div style="display:flex; gap:10px;">
+
+<a th:href="@{/login}" class="volver" style="background:#28a745;">
+Iniciar sesión
+</a>
+
 <a href="/" class="volver">
 ← Inicio
 </a>
+
+</div>
 
 </div>
 
@@ -267,7 +275,7 @@ th:text="${error}">
 th:if="${param.exito}"
 class="exito">
 
-✅ Usuario registrado correctamente.
+✅ Usuario registrado correctamente. <a th:href="@{/login}" style="color:#27ae60;font-weight:bold;">Inicia sesión aquí</a>.
 
 </div>
 

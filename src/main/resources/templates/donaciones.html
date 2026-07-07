@@ -313,11 +313,16 @@
     <a href="/">
         <span class="nav-icon">🏠</span> Dashboard
     </a>
-    <a href="/donaciones-web" class="active">
+    <a th:href="@{/donaciones/registro}" class="active">
         <span class="nav-icon">💝</span> Donaciones
     </a>
 
     <div class="sidebar-footer">
+        <p style="margin-bottom:10px;" th:if="${nombreUsuario != null}">
+            👋 <span th:text="${nombreUsuario}"></span>
+        </p>
+        <a th:if="${nombreUsuario != null}" th:href="@{/logout}"
+           style="color:#f87171;text-decoration:none;">Cerrar sesión</a>
         Donaton &copy; 2026<br>Arquitectura de Microservicios
     </div>
 </div>
@@ -336,112 +341,26 @@
             <span>📝</span> Nueva Donación
         </div>
 
-        <div class="tipo-selector">
-            <button type="button" class="active" id="btn-persona" onclick="mostrarSeccion('persona')">
-                👤 Donante Natural (Persona)
-            </button>
-            <button type="button" id="btn-empresa" onclick="mostrarSeccion('empresa')">
-                🏢 Donante Jurídico (Empresa)
-            </button>
+        <div th:if="${error}" class="error" style="background:#fee2e2;color:#b91c1c;padding:12px;border-radius:8px;margin-bottom:20px;" th:text="${error}"></div>
+
+        <div th:if="${param.exito}" class="exito" style="background:#dcfce7;color:#15803d;padding:12px;border-radius:8px;margin-bottom:20px;">
+            ✅ ¡Gracias por tu donación! Se registró correctamente.
         </div>
 
-        <form action="/guardar-donacion-persona" method="post" id="form-persona" class="seccion-donante visible">
+        <p style="margin-bottom:20px;color:#64748b;">
+            Donando como: <strong th:text="${nombreUsuario}"></strong>
+        </p>
+
+        <form th:action="@{/donaciones/guardar}" th:object="${donacion}" method="post">
             <div class="form-grid">
-                <p class="section-divider">Identificación del Sistema</p>
 
                 <div class="form-group">
-                    <label>ID Donante <span class="auto-badge">AUTOMÁTICO</span></label>
-                    <input type="text" name="idDonante" placeholder="Generado automáticamente" disabled>
-                </div>
-                <div class="form-group">
-                    <label>ID Donación <span class="auto-badge">AUTOMÁTICO</span></label>
-                    <input type="text" name="idDonacion" placeholder="Generado automáticamente" disabled>
+                    <label>Monto a Donar (CLP)</label>
+                    <input type="number" step="0.01" min="1" th:field="*{monto}" placeholder="Ej: 10000" required>
                 </div>
 
-                <p class="section-divider">Datos Personales</p>
-
-                <div class="form-group">
-                    <label>Nombre y Apellido</label>
-                    <input type="text" name="nombreApellido" placeholder="Ej: Juan Pérez González" required>
-                </div>
-                <div class="form-group">
-                    <label>Información de Contacto</label>
-                    <input type="text" name="contacto" placeholder="Teléfono, correo o dirección" required>
-                </div>
-
-                <p class="section-divider">Detalles de la Donación</p>
-
-                <div class="form-group">
-                    <label>Tipo de Donación</label>
-                    <input type="text" name="tipo" placeholder="Ej: Ropa, alimentos, dinero" required>
-                </div>
-                <div class="form-group">
-                    <label>Cantidad</label>
-                    <input type="number" name="cantidad" placeholder="0" required>
-                </div>
-                <div class="form-group full-width">
-                    <label>Declaración de Recursos</label>
-                    <textarea name="declaracionRecursos" rows="3" placeholder="Describa los recursos donados (origen, estado, detalles relevantes)" required></textarea>
-                </div>
-
-                <p class="section-divider">Registro</p>
-
-                <div class="form-group">
-                    <label>Fecha <span class="auto-badge">AUTOMÁTICO</span></label>
-                    <input type="text" name="fecha" placeholder="Asignada automáticamente" disabled>
-                </div>
-                <div class="form-group">
-                    <label>RUT Registrador Encargado</label>
-                    <input type="text" name="rutRegistrador" placeholder="Ej: 12.345.678-9" required>
-                </div>
             </div>
-            <button type="submit" class="btn-submit">Registrar Donación (Persona) ✔</button>
-        </form>
-
-
-        <form action="/guardar-donacion-empresa" method="post" id="form-empresa" class="seccion-donante">
-            <div class="form-grid">
-                <p class="section-divider">Identificación del Sistema</p>
-
-                <div class="form-group">
-                    <label>ID Empresa <span class="auto-badge">AUTOMÁTICO</span></label>
-                    <input type="text" name="idEmpresaDonante" placeholder="Generado automáticamente" disabled>
-                </div>
-                <div class="form-group">
-                    <label>ID Donación <span class="auto-badge">AUTOMÁTICO</span></label>
-                    <input type="text" name="idDonacion" placeholder="Generado automáticamente" disabled>
-                </div>
-
-                <p class="section-divider">Datos de la Empresa</p>
-
-                <div class="form-group full-width">
-                    <label>Razón Social / Nombre de la Empresa</label>
-                    <input type="text" name="nombreEmpresa" placeholder="Ej: Constructora Andes S.A." required>
-                </div>
-
-                <p class="section-divider">Detalles de la Donación</p>
-
-                <div class="form-group">
-                    <label>Tipo de Donación</label>
-                    <input type="text" name="tipo" placeholder="Ej: Equipos, insumos, dinero" required>
-                </div>
-                <div class="form-group">
-                    <label>Cantidad</label>
-                    <input type="number" name="cantidad" placeholder="0" required>
-                </div>
-                <div class="form-group full-width">
-                    <label>Declaración de Recursos</label>
-                    <textarea name="declaracionRecursos" rows="3" placeholder="Describa los recursos donados (origen, estado, detalles relevantes)" required></textarea>
-                </div>
-
-                <p class="section-divider">Registro</p>
-
-                <div class="form-group full-width">
-                    <label>Fecha <span class="auto-badge">AUTOMÁTICO</span></label>
-                    <input type="text" name="fecha" placeholder="Asignada automáticamente" disabled>
-                </div>
-            </div>
-            <button type="submit" class="btn-submit">Registrar Donación (Empresa) ✔</button>
+            <button type="submit" class="btn-submit">Registrar Donación ✔</button>
         </form>
 
     </div>
@@ -456,26 +375,22 @@
                 <tr>
                     <th>ID</th>
                     <th>Donante</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
                     <th>Fecha</th>
-                    <th style="text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="d : ${donaciones}">
                     <td th:text="${d.id}"></td>
                     <td th:text="${d.donante}" style="font-weight: 600;"></td>
-                    <td><span class="badge-tipo" th:text="${d.tipo}"></span></td>
-                    <td th:text="${d.cantidad}"></td>
+                    <td th:text="${'$'+d.monto}"></td>
+                    <td><span class="badge-tipo" th:text="${d.estado}"></span></td>
                     <td th:text="${d.fecha}"></td>
-                    <td style="text-align: center;">
-                        <a class="btn-delete" th:href="@{/eliminar-donacion/{id}(id=${d.id})}">Eliminar 🗑️</a>
-                    </td>
                 </tr>
-                
+
                 <tr th:if="${#lists.isEmpty(donaciones)}">
-                    <td colspan="6" style="text-align: center; padding: 40px; color: #94a3b8;">
+                    <td colspan="5" style="text-align: center; padding: 40px; color: #94a3b8;">
                         <div style="font-size: 2rem; margin-bottom: 10px;">📭</div>
                         No hay donaciones registradas en el sistema.
                     </td>
@@ -485,23 +400,6 @@
     </div>
 
 </div>
-
-<script>
-    // Función para alternar entre el formulario de Persona y Empresa
-    function mostrarSeccion(tipo) {
-        // Ocultar todos los formularios
-        document.getElementById('form-persona').classList.remove('visible');
-        document.getElementById('form-empresa').classList.remove('visible');
-        
-        // Mostrar el seleccionado
-        document.getElementById('form-' + tipo).classList.add('visible');
-
-        // Cambiar estilo de los botones del selector
-        document.getElementById('btn-persona').classList.remove('active');
-        document.getElementById('btn-empresa').classList.remove('active');
-        document.getElementById('btn-' + tipo).classList.add('active');
-    }
-</script>
 
 </body>
 </html>

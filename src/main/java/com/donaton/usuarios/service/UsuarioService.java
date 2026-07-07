@@ -35,4 +35,16 @@ public class UsuarioService {
     public Optional<Usuario> obtenerPorId(Long id) {
         return usuarioRepository.findById(id);
     }
+
+    // 4. Autenticar (login): valida que el correo exista y que la contraseña coincida
+    public Optional<Usuario> autenticar(String email, String password) {
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(email);
+
+        if (usuarioExistente.isPresent() && usuarioExistente.get().getPassword().equals(password)) {
+            return usuarioExistente;
+        }
+
+        // Si el correo no existe o la contraseña no coincide, no hay sesión válida
+        return Optional.empty();
+    }
 }
